@@ -41,7 +41,8 @@ if torch.cuda.is_available():
         prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="reduce-overhead", fullgraph=True)
         decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="reduce-overhead", fullgraph=True)
 
-    #if PREVIEW_IMAGES:
+    if PREVIEW_IMAGES:
+        pass
     #    previewer = Previewer()
     #    previewer.load_state_dict(torch.load("previewer/text2img_wurstchen_b_v1_previewer_100k.pt")["state_dict"])
     #    previewer.eval().requires_grad_(False).to(device).to(dtype)
