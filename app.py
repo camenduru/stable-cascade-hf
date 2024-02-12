@@ -193,7 +193,7 @@ with gr.Blocks() as demo:
                 minimum=1,
                 maximum=2,
                 step=1,
-                value=1,
+                value=2,
             )
         with gr.Row():
             prior_guidance_scale = gr.Slider(
