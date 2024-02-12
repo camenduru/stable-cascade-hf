@@ -247,7 +247,7 @@ with gr.Blocks() as demo:
             num_images_per_prompt,
     ]
     gr.on(
-        [prompt.submit, negative_prompt.submit, run_button.click],
+        triggers=[prompt.submit, negative_prompt.submit, run_button.click],
         fn=randomize_seed_fn,
         inputs=[seed, randomize_seed],
         outputs=seed,
