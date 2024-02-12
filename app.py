@@ -9,6 +9,7 @@ from diffusers.utils import numpy_to_pil
 from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline
 from diffusers.pipelines.wuerstchen import DEFAULT_STAGE_C_TIMESTEPS
 import spaces 
+from previewer.modules import Previewer
 #import user_history
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
