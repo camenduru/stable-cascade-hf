@@ -43,15 +43,14 @@ if torch.cuda.is_available():
         decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
     
     if PREVIEW_IMAGES:
-        pass
-    #    previewer = Previewer()
-    #    previewer.load_state_dict(torch.load("previewer/text2img_wurstchen_b_v1_previewer_100k.pt")["state_dict"])
-    #    previewer.eval().requires_grad_(False).to(device).to(dtype)
+        previewer = Previewer()
+        previewer.load_state_dict(torch.load("previewer/previewer_v1_100k.pt")["state_dict"])
+        previewer.eval().requires_grad_(False).to(device).to(dtype)
 
-    #    def callback_prior(i, t, latents):
-    #        output = previewer(latents)
-    #        output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).cpu().numpy())
-    #        return output
+        def callback_prior(i, t, latents):
+            output = previewer(latents)
+            output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).cpu().numpy())
+            return output
 
     else:
         previewer = None
@@ -97,12 +96,12 @@ def generate(
         callback=callback_prior,
     )
 
-    #if PREVIEW_IMAGES:
-    #    for _ in range(len(DEFAULT_STAGE_C_TIMESTEPS)):
-    #        r = next(prior_output)
-    #        if isinstance(r, list):
-    #            yield r
-    #    prior_output = r
+    if PREVIEW_IMAGES:
+        for _ in range(len(DEFAULT_STAGE_C_TIMESTEPS)):
+            r = next(prior_output)
+            if isinstance(r, list):
+                yield r[0]
+        prior_output = r
 
     decoder_output = decoder_pipeline(
         image_embeddings=prior_output.image_embeddings,
