@@ -21,7 +21,7 @@ if not torch.cuda.is_available():
 MAX_SEED = np.iinfo(np.int32).max
 CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") == "1"
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
-USE_TORCH_COMPILE = False
+USE_TORCH_COMPILE = True
 ENABLE_CPU_OFFLOAD = os.getenv("ENABLE_CPU_OFFLOAD") == "1"
 PREVIEW_IMAGES = False #not working for now
 
@@ -40,7 +40,7 @@ if torch.cuda.is_available():
 
     if USE_TORCH_COMPILE:
         prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="max-autotune", fullgraph=True)
-        decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
+        #decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
     
     if PREVIEW_IMAGES:
         pass
