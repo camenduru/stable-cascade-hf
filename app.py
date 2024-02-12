@@ -78,7 +78,7 @@ def generate(
     # decoder_timesteps: List[float] = None,
     decoder_guidance_scale: float = 0.0,
     num_images_per_prompt: int = 2,
-    profile: gr.OAuthProfile | None = None,
+    #profile: gr.OAuthProfile | None = None,
 ) -> PIL.Image.Image:
     generator = torch.Generator().manual_seed(seed)
 
