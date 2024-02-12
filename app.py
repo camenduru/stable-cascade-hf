@@ -14,7 +14,7 @@ import spaces
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 DESCRIPTION = "# Stable Cascade"
-DESCRIPTION += "\n<p style=\"text-align: center\"><a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casaade</a> is a new fast and efficient high resolution text-to-image architecture and model built on the Würstchen architecture</p>"
+DESCRIPTION += "\n<p style=\"text-align: center\"><a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casaade</a> is a high resolution text-to-image model built on the Würstchen architecture, efficient by using a smaller latent space</p>"
 if not torch.cuda.is_available():
     DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
 
@@ -133,7 +133,7 @@ def generate(
     #        },
     #    )
 
-    yield decoder_output
+    yield decoder_output[0]
 
 
 examples = [
@@ -158,7 +158,7 @@ with gr.Blocks() as demo:
                 container=False,
             )
             run_button = gr.Button("Run", scale=0)
-        result = gr.Gallery(label="Result", show_label=False)
+        result = gr.Image(label="Result", show_label=False)
     with gr.Accordion("Advanced options", open=False):
         negative_prompt = gr.Text(
             label="Negative prompt",
