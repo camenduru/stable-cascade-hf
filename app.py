@@ -46,7 +46,6 @@ if torch.cuda.is_available():
     if PREVIEW_IMAGES:
         previewer = Previewer()
         previewer.load_state_dict(torch.load("previewer/text2img_wurstchen_b_v1_previewer_100k.pt")["state_dict"])
-        previewer.eval().requires_grad_(False).to(device).to(dtype)
 
         def callback_prior(i, t, latents):
             output = previewer(latents)
@@ -84,6 +83,7 @@ def generate(
 ) -> PIL.Image.Image:
     prior_pipeline.to("cuda")
     decoder_pipeline.to("cuda")
+    previewer.eval().requires_grad_(False).to(device).to(dtype)
     generator = torch.Generator().manual_seed(seed)
     prior_output = prior_pipeline(
         prompt=prompt,
