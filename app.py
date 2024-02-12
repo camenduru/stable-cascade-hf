@@ -45,7 +45,7 @@ if torch.cuda.is_available():
     
     if PREVIEW_IMAGES:
         previewer = Previewer()
-        previewer.load_state_dict(torch.load("previewer/text2img_wurstchen_b_v1_previewer_100k.pt")["state_dict"])
+        previewer.load_state_dict(torch.load("previewer/previewer_v1_100k.pt")["state_dict"])
 
         def callback_prior(i, t, latents):
             output = previewer(latents)
