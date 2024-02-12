@@ -41,8 +41,6 @@ if torch.cuda.is_available():
     if USE_TORCH_COMPILE:
         prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="max-autotune", fullgraph=True)
         decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
-        prior_pipeline.fuse_qkv_projections()
-        decoder_pipeline.fuse_qkv_projections()
         torch._inductor.config.conv_1x1_as_mm = True
         torch._inductor.config.coordinate_descent_tuning = True
         torch._inductor.config.epilogue_fusion = False
