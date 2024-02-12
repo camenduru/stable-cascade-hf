@@ -45,7 +45,7 @@ if torch.cuda.is_available():
     
     if PREVIEW_IMAGES:
         previewer = Previewer()
-
+        previewer.load_state_dict(torch.load("previewer/previewer_v1_100k.pt")["state_dict"])
         def callback_prior(i, t, latents):
             output = previewer(latents)
             output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).cpu().numpy())
@@ -97,8 +97,6 @@ def generate(
     )
 
     if PREVIEW_IMAGES:
-        previewer.load_state_dict(torch.load("previewer/previewer_v1_100k.pt")["state_dict"])
-
         for _ in range(len(DEFAULT_STAGE_C_TIMESTEPS)):
             r = next(prior_output)
             if isinstance(r, list):
