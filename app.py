@@ -21,7 +21,7 @@ if not torch.cuda.is_available():
 MAX_SEED = np.iinfo(np.int32).max
 CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") == "1"
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
-USE_TORCH_COMPILE = True
+USE_TORCH_COMPILE = False
 ENABLE_CPU_OFFLOAD = os.getenv("ENABLE_CPU_OFFLOAD") == "1"
 PREVIEW_IMAGES = False #not working for now
 
@@ -41,12 +41,7 @@ if torch.cuda.is_available():
     if USE_TORCH_COMPILE:
         prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="max-autotune", fullgraph=True)
         decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
-        torch._inductor.config.conv_1x1_as_mm = True
-        torch._inductor.config.coordinate_descent_tuning = True
-        torch._inductor.config.epilogue_fusion = False
-        torch._inductor.config.coordinate_descent_check_all_directions = True
-        prior_pipeline.prior.to(memory_format=torch.channels_last)
-        decoder_pipeline.decoder.to(memory_format=torch.channels_last)
+    
     if PREVIEW_IMAGES:
         pass
     #    previewer = Previewer()
@@ -198,7 +193,7 @@ with gr.Blocks() as demo:
                 minimum=1,
                 maximum=2,
                 step=1,
-                value=2,
+                value=1,
             )
         with gr.Row():
             prior_guidance_scale = gr.Slider(
