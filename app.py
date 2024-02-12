@@ -9,7 +9,7 @@ from diffusers.utils import numpy_to_pil
 from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline
 from diffusers.pipelines.wuerstchen import DEFAULT_STAGE_C_TIMESTEPS
 
-import user_history
+#import user_history
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
@@ -113,22 +113,22 @@ def generate(
     ).images
 
     # Save images
-    for image in decoder_output:
-        user_history.save_image(
-            profile=profile,
-            image=image,
-            label=prompt,
-            metadata={
-                "negative_prompt": negative_prompt,
-                "seed": seed,
-                "width": width,
-                "height": height,
-                "prior_guidance_scale": prior_guidance_scale,
-                "decoder_num_inference_steps": decoder_num_inference_steps,
-                "decoder_guidance_scale": decoder_guidance_scale,
-                "num_images_per_prompt": num_images_per_prompt,
-            },
-        )
+    #for image in decoder_output:
+    #    user_history.save_image(
+    #        profile=profile,
+    #        image=image,
+    #        label=prompt,
+    #        metadata={
+    #            "negative_prompt": negative_prompt,
+    #            "seed": seed,
+    #            "width": width,
+    #            "height": height,
+    #            "prior_guidance_scale": prior_guidance_scale,
+    #            "decoder_num_inference_steps": decoder_num_inference_steps,
+    #            "decoder_guidance_scale": decoder_guidance_scale,
+    #            "num_images_per_prompt": num_images_per_prompt,
+    #        },
+    #    )
 
     yield decoder_output
 
@@ -261,10 +261,10 @@ with gr.Blocks() as demo:
     )
     
 with gr.Blocks(css="style.css") as demo_with_history:
-    with gr.Tab("App"):
-        demo.render()
-    with gr.Tab("Past generations"):
-        user_history.render()
+    #with gr.Tab("App"):
+    demo.render()
+    #with gr.Tab("Past generations"):
+    #    user_history.render()
 
 if __name__ == "__main__":
     demo_with_history.queue(max_size=20).launch()
