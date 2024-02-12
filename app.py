@@ -39,7 +39,7 @@ if torch.cuda.is_available():
         decoder_pipeline.to(device)
 
     if USE_TORCH_COMPILE:
-        prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="reduce-overhead", fullgraph=True)
+        #prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="reduce-overhead", fullgraph=True)
         decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
     
     if PREVIEW_IMAGES:
