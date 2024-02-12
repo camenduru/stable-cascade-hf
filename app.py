@@ -268,9 +268,3 @@ with gr.Blocks(css="style.css") as demo_with_history:
 
 if __name__ == "__main__":
     demo_with_history.queue(max_size=20).launch()
-
-
-prior_output = prior(prompt)
-images = decoder(prompt=prompt, 
-              image_embeddings=prior_output.image_embeddings)
-images[0][0]
