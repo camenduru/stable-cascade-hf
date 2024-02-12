@@ -8,20 +8,20 @@ from typing import List
 from diffusers.utils import numpy_to_pil
 from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline
 from diffusers.pipelines.wuerstchen import DEFAULT_STAGE_C_TIMESTEPS
-
+import spaces 
 #import user_history
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 DESCRIPTION = "# Stable Cascade"
-#DESCRIPTION += "\n<p style=\"text-align: center\"><a href='https://huggingface.co/warp-ai/wuerstchen' target='_blank'>Würstchen</a> is a new fast and efficient high resolution text-to-image architecture and model</p>"
+DESCRIPTION += "\n<p style=\"text-align: center\"><a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casaade</a> is a new fast and efficient high resolution text-to-image architecture and model built on the Würstchen architecture</p>"
 if not torch.cuda.is_available():
     DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
 
 MAX_SEED = np.iinfo(np.int32).max
 CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") == "1"
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
-USE_TORCH_COMPILE = True
+USE_TORCH_COMPILE = False
 ENABLE_CPU_OFFLOAD = os.getenv("ENABLE_CPU_OFFLOAD") == "1"
 PREVIEW_IMAGES = False #not working for now
 
@@ -39,8 +39,8 @@ if torch.cuda.is_available():
         decoder_pipeline.to(device)
 
     if USE_TORCH_COMPILE:
-        #prior_pipeline.prior = torch.compile(prior_pipeline.prior)
-        decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="reduce-overhead", fullgraph=True)
+        prior_pipeline.prior = torch.compile(prior_pipeline.prior, mode="reduce-overhead", fullgraph=True)
+        decoder_pipeline.decoder = torch.compile(decoder_pipeline.decoder, mode="max-autotune", fullgraph=True)
     
     if PREVIEW_IMAGES:
         pass
@@ -66,7 +66,7 @@ def randomize_seed_fn(seed: int, randomize_seed: bool) -> int:
         seed = random.randint(0, MAX_SEED)
     return seed
 
-
+@spaces.GPU
 def generate(
     prompt: str,
     negative_prompt: str = "",
@@ -82,8 +82,9 @@ def generate(
     num_images_per_prompt: int = 2,
     #profile: gr.OAuthProfile | None = None,
 ) -> PIL.Image.Image:
+    prior_pipeline.to("cuda")
+    decoder_pipeline.to("cuda")
     generator = torch.Generator().manual_seed(seed)
-
     prior_output = prior_pipeline(
         prompt=prompt,
         height=height,
@@ -193,7 +194,7 @@ with gr.Blocks() as demo:
                 minimum=1,
                 maximum=2,
                 step=1,
-                value=2,
+                value=1,
             )
         with gr.Row():
             prior_guidance_scale = gr.Slider(
