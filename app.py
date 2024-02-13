@@ -8,17 +8,12 @@ from typing import List
 from diffusers.utils import numpy_to_pil
 from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline
 from diffusers.pipelines.wuerstchen import DEFAULT_STAGE_C_TIMESTEPS
-import spaces 
 from previewer.modules import Previewer
-import user_history
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 DESCRIPTION = "# Stable Cascade"
 DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a new high resolution text-to-image model by Stability AI, built on the Würstchen architecture - <a href='https://huggingface.co/stabilityai/stable-cascade/blob/main/LICENSE' target='_blank'>non-commercial research license</a></p>"
-if not torch.cuda.is_available():
-    DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
-
 MAX_SEED = np.iinfo(np.int32).max
 CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") != "0"
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
@@ -66,7 +61,6 @@ def randomize_seed_fn(seed: int, randomize_seed: bool) -> int:
         seed = random.randint(0, MAX_SEED)
     return seed
 
-@spaces.GPU
 def generate(
     prompt: str,
     negative_prompt: str = "",
@@ -118,24 +112,6 @@ def generate(
         generator=generator,
         output_type="pil",
     ).images
-
-    #Save images
-    for image in decoder_output:
-        user_history.save_image(
-            profile=profile,
-            image=image,
-            label=prompt,
-            metadata={
-                "negative_prompt": negative_prompt,
-                "seed": seed,
-                "width": width,
-                "height": height,
-                "prior_guidance_scale": prior_guidance_scale,
-                "decoder_num_inference_steps": decoder_num_inference_steps,
-                "decoder_guidance_scale": decoder_guidance_scale,
-                "num_images_per_prompt": num_images_per_prompt,
-            },
-        )
 
     yield decoder_output[0]
 
@@ -269,11 +245,8 @@ with gr.Blocks() as demo:
         api_name="run",
     )
     
-with gr.Blocks(css="style.css") as demo_with_history:
-    with gr.Tab("App"):
-        demo.render()
-    with gr.Tab("Past generations"):
-        user_history.render()
+with gr.Blocks(css="style.css") as demo:
+    demo.render()
 
 if __name__ == "__main__":
-    demo_with_history.queue(max_size=20).launch()
+    demo.queue().launch(share=True)
