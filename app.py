@@ -50,10 +50,11 @@ if torch.cuda.is_available():
             output = previewer(latents)
             output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).cpu().numpy())
             return output
-
+        callback_steps = 1
     else:
         previewer = None
         callback_prior = None
+        callback_steps = None
 else:
     prior_pipeline = None
     decoder_pipeline = None
@@ -94,6 +95,7 @@ def generate(
         num_images_per_prompt=num_images_per_prompt,
         generator=generator,
         callback=callback_prior,
+        callback_steps=callback_steps
     )
 
     if PREVIEW_IMAGES:
