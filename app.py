@@ -20,7 +20,7 @@ if not torch.cuda.is_available():
     DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
 
 MAX_SEED = np.iinfo(np.int32).max
-CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") == "1"
+CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") != "0"
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
 USE_TORCH_COMPILE = False
 ENABLE_CPU_OFFLOAD = os.getenv("ENABLE_CPU_OFFLOAD") == "1"
@@ -142,6 +142,7 @@ def generate(
 examples = [
     "Astronaut in a jungle, cold color palette, muted colors, detailed, 8k",
     "An astronaut riding a green horse",
+    "A mecha robot in a favela by Tarsila do Amaral"
 ]
 
 with gr.Blocks() as demo:
