@@ -15,7 +15,7 @@ os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 DESCRIPTION = "# Stable Cascade"
 DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a new high resolution text-to-image model by Stability AI, built on the Würstchen architecture - <a href='https://huggingface.co/stabilityai/stable-cascade/blob/main/LICENSE' target='_blank'>non-commercial research license</a></p>"
 MAX_SEED = np.iinfo(np.int32).max
-CACHE_EXAMPLES = torch.cuda.is_available() and os.getenv("CACHE_EXAMPLES") != "0"
+CACHE_EXAMPLES = False
 MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE", "1536"))
 USE_TORCH_COMPILE = False
 ENABLE_CPU_OFFLOAD = os.getenv("ENABLE_CPU_OFFLOAD") == "1"
@@ -245,8 +245,9 @@ with gr.Blocks() as demo:
         api_name="run",
     )
     
-with gr.Blocks(css="style.css") as demo:
-    demo.render()
+with gr.Blocks(css="style.css") as demo_with_history:
+    with gr.Tab("App"):
+        demo.render()
 
 if __name__ == "__main__":
-    demo.queue().launch(share=True)
+    demo_with_history.queue().launch(share=True)
