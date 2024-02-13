@@ -15,7 +15,7 @@ import user_history
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 DESCRIPTION = "# Stable Cascade"
-DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a new high resolution text-to-image model by Stability AI, built on the Würstchen architecture</p>"
+DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a new high resolution text-to-image model by Stability AI, built on the Würstchen architecture - [non-commercial research license](https://huggingface.co/stabilityai/stable-cascade/blob/main/LICENSE)</p>"
 if not torch.cuda.is_available():
     DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
 
