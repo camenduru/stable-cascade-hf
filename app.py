@@ -142,7 +142,9 @@ def generate(
 examples = [
     "Astronaut in a jungle, cold color palette, muted colors, detailed, 8k",
     "An astronaut riding a green horse",
-    "A mecha robot in a favela by Tarsila do Amaral"
+    "A mecha robot in a favela by Tarsila do Amaral",
+    "The sprirt of a Tamagotchi wandering in the city of Los Angeles",
+    "A delicious feijoada ramen dish"
 ]
 
 with gr.Blocks() as demo:
