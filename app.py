@@ -15,7 +15,7 @@ from previewer.modules import Previewer
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 DESCRIPTION = "# Stable Cascade"
-DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a high resolution text-to-image model built on the Würstchen architecture (Würstchen v3)</p>"
+DESCRIPTION += "\n<p style=\"text-align: center\">Unofficial demo for <a href='https://huggingface.co/stabilityai/stable-cascade' target='_blank'>Stable Casacade</a>, a new high resolution text-to-image model by Stability AI, built on the Würstchen architecture</p>"
 if not torch.cuda.is_available():
     DESCRIPTION += "\n<p>Running on CPU 🥶</p>"
 
