@@ -118,7 +118,7 @@ def generate(
         output_type="pil",
     ).images
 
-     Save images
+    #Save images
     for image in decoder_output:
         user_history.save_image(
             profile=profile,
