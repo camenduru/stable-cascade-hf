@@ -1,4 +1,4 @@
-git+https://github.com/kashif/diffusers.git@wuerstchen-v3
+git+https://github.com/kashif/diffusers.git@diffusers-yield-callback
 accelerate
 safetensors
 transformers
