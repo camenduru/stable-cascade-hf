@@ -62,7 +62,7 @@ def render() -> None:
 
     with gr.Row():
         gr.LoginButton(min_width=250)
-        gr.LogoutButton(min_width=250)
+        #gr.LogoutButton(min_width=250)
         refresh_button = gr.Button(
             "Refresh",
             icon="https://huggingface.co/spaces/Wauplin/gradio-user-history/resolve/main/assets/icon_refresh.png",
