@@ -212,7 +212,7 @@ with gr.Blocks() as demo:
                 minimum=10,
                 maximum=30,
                 step=1,
-                value=25,
+                value=20,
             )
 
             decoder_guidance_scale = gr.Slider(
