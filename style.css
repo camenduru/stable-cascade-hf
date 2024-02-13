@@ -2,7 +2,7 @@ h1 {
   text-align: center;
   justify-content: center; 
 }
-
+[role="tabpanel"]{border: 0}
 #duplicate-button {
   margin: auto;
   color: #fff;
