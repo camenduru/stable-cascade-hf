@@ -29,8 +29,8 @@ PREVIEW_IMAGES = True
 dtype = torch.bfloat16
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if torch.cuda.is_available():
-    prior_pipeline = StableCascadePriorPipeline.from_pretrained("stabilityai/stable-cascade-prior", torch_dtype=dtype).to(device)
-    decoder_pipeline = StableCascadeDecoderPipeline.from_pretrained("stabilityai/stable-cascade",  torch_dtype=dtype).to(device) 
+    prior_pipeline = StableCascadePriorPipeline.from_pretrained("stabilityai/stable-cascade-prior", torch_dtype=dtype)#.to(device)
+    decoder_pipeline = StableCascadeDecoderPipeline.from_pretrained("stabilityai/stable-cascade",  torch_dtype=dtype)#.to(device) 
 
     if ENABLE_CPU_OFFLOAD:
         prior_pipeline.enable_model_cpu_offload()
@@ -45,8 +45,8 @@ if torch.cuda.is_available():
     
     if PREVIEW_IMAGES:
         previewer = Previewer()
-        previewer.load_state_dict(torch.load("previewer/previewer_v1_100k.pt")["state_dict"])
-        previewer.eval().requires_grad_(False).to(device).to(dtype)
+        previewer_state_dict = torch.load("previewer/previewer_v1_100k.pt", map_location=torch.device('cpu'))["state_dict"]
+        previewer.load_state_dict(previewer_state_dict)
         def callback_prior(i, t, latents):
             output = previewer(latents)
             output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).float().cpu().numpy())
@@ -82,9 +82,10 @@ def generate(
     num_images_per_prompt: int = 2,
     profile: gr.OAuthProfile | None = None,
 ) -> PIL.Image.Image:
-    #prior_pipeline.to(device)
-    #decoder_pipeline.to(device)
-    #previewer.eval().requires_grad_(False).to(device).to(dtype)
+    previewer.eval().requires_grad_(False).to(device).to(dtype)
+    prior_pipeline.to(device)
+    decoder_pipeline.to(device)
+    
     generator = torch.Generator().manual_seed(seed)
     prior_output = prior_pipeline(
         prompt=prompt,
