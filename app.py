@@ -10,7 +10,7 @@ from diffusers import StableCascadeDecoderPipeline, StableCascadePriorPipeline
 from diffusers.pipelines.wuerstchen import DEFAULT_STAGE_C_TIMESTEPS
 import spaces 
 from previewer.modules import Previewer
-#import user_history
+import user_history
 
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
@@ -118,23 +118,23 @@ def generate(
         output_type="pil",
     ).images
 
-    # Save images
-    #for image in decoder_output:
-    #    user_history.save_image(
-    #        profile=profile,
-    #        image=image,
-    #        label=prompt,
-    #        metadata={
-    #            "negative_prompt": negative_prompt,
-    #            "seed": seed,
-    #            "width": width,
-    #            "height": height,
-    #            "prior_guidance_scale": prior_guidance_scale,
-    #            "decoder_num_inference_steps": decoder_num_inference_steps,
-    #            "decoder_guidance_scale": decoder_guidance_scale,
-    #            "num_images_per_prompt": num_images_per_prompt,
-    #        },
-    #    )
+     Save images
+    for image in decoder_output:
+        user_history.save_image(
+            profile=profile,
+            image=image,
+            label=prompt,
+            metadata={
+                "negative_prompt": negative_prompt,
+                "seed": seed,
+                "width": width,
+                "height": height,
+                "prior_guidance_scale": prior_guidance_scale,
+                "decoder_num_inference_steps": decoder_num_inference_steps,
+                "decoder_guidance_scale": decoder_guidance_scale,
+                "num_images_per_prompt": num_images_per_prompt,
+            },
+        )
 
     yield decoder_output[0]
 
@@ -267,10 +267,10 @@ with gr.Blocks() as demo:
     )
     
 with gr.Blocks(css="style.css") as demo_with_history:
-    #with gr.Tab("App"):
-    demo.render()
-    #with gr.Tab("Past generations"):
-    #    user_history.render()
+    with gr.Tab("App"):
+        demo.render()
+    with gr.Tab("Past generations"):
+        user_history.render()
 
 if __name__ == "__main__":
     demo_with_history.queue(max_size=20).launch()
