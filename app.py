@@ -49,7 +49,7 @@ if torch.cuda.is_available():
         previewer.eval().requires_grad_(False).to(device).to(dtype)
         def callback_prior(i, t, latents):
             output = previewer(latents)
-            output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).cpu().numpy())
+            output = numpy_to_pil(output.clamp(0, 1).permute(0, 2, 3, 1).float().cpu().numpy())
             return output
         callback_steps = 1
     else:
